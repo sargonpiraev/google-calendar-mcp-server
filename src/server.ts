@@ -7,13 +7,13 @@ import { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
 dotenv.config()
 
 export const envSchema = z.object({
-  GOOGLE-CALENDAR_CLIENT_ID: z.string(),
-  GOOGLE-CALENDAR_CLIENT_SECRET: z.string(),
+  GOOGLE-TASKS_CLIENT_ID: z.string(),
+  GOOGLE-TASKS_CLIENT_SECRET: z.string(),
 })
 
 export const mcpServer = new McpServer(
   {
-    name: '@sargonpiraev/google-calendar-mcp-server',
+    name: '@sargonpiraev/google-tasks-mcp-server',
     version: 'v3',
   },
   {

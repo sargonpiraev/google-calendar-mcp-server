@@ -1,5 +1,5 @@
 {
-  "name": "@sargonpiraev/google-calendar-mcp-server",
+  "name": "@sargonpiraev/google-tasks-mcp-server",
   "version": "v3",
   "description": "The Google Calendar API is a RESTful API that can be accessed through explicit HTTP calls or using the Google Client Libraries. 
 The API exposes most of the features available in the Google Calendar Web interface.
@@ -16,7 +16,7 @@ Common terms:
     "claude",
     "ai",
     "assistant",
-    "google-calendar"
+    "google-tasks"
   ],
   "main": "./build/main.js",
   "types": "./build/main.d.ts",
@@ -27,7 +27,7 @@ Common terms:
     "LICENSE"
   ],
   "bin": {
-    "google-calendar-mcp-server": "./build/main.js"
+    "google-tasks-mcp-server": "./build/main.js"
   },
   "scripts": {
     "test": "jest --passWithNoTests --coverage",
@@ -40,7 +40,7 @@ Common terms:
     "commitlint": "commitlint --edit",
     "typecheck": "tsc --noEmit",
     "audit": "npm audit --omit=dev",
-    "inspect": "npx @modelcontextprotocol/inspector --config mcp.json --server google-calendar"
+    "inspect": "npx @modelcontextprotocol/inspector --config mcp.json --server google-tasks"
   },
   "engines": {
     "node": ">=18.0.0"
