@@ -1,0 +1,95 @@
+{
+  "name": "@sargonpiraev/google-calendar-mcp-server",
+  "version": "v3",
+  "description": "The Google Calendar API is a RESTful API that can be accessed through explicit HTTP calls or using the Google Client Libraries. 
+The API exposes most of the features available in the Google Calendar Web interface.
+
+Common terms:
+- **Event**: An event on a calendar containing information such as the title, start and end times, and attendees
+- **Calendar**: A collection of events with associated metadata such as description or default time zone
+- **Calendar List**: A list of all calendars on a user&#x27;s calendar list in the Calendar UI
+- **Setting**: A user preference from the Calendar UI, such as the user&#x27;s time zone
+- **ACL**: An access control rule granting a user (or group) a specified level of access to a calendar
+",
+  "keywords": [
+    "mcp",
+    "claude",
+    "ai",
+    "assistant",
+    "google-calendar"
+  ],
+  "main": "./build/main.js",
+  "types": "./build/main.d.ts",
+  "type": "module",
+  "files": [
+    "build/",
+    "README.md",
+    "LICENSE"
+  ],
+  "bin": {
+    "google-calendar-mcp-server": "./build/main.js"
+  },
+  "scripts": {
+    "test": "jest --passWithNoTests --coverage",
+    "dev": "tsx watch ./src/main.ts", 
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint ./src --ext .ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky",
+    "commitlint": "commitlint --edit",
+    "typecheck": "tsc --noEmit",
+    "audit": "npm audit --omit=dev",
+    "inspect": "npx @modelcontextprotocol/inspector --config mcp.json --server google-calendar"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "dotenv": "^16.5.0",
+    "zod": "^3.24.3",
+    "axios": "^1.7.7",
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0",
+    "@eslint/js": "^9.26.0",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/github": "^11.0.0",
+    "@semantic-release/npm": "^12.0.2",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "@types/debug": "^4.1.12",
+    "@types/node": "^22.15.3",
+    "@types/express": "^4.17.17",
+    "@types/cors": "^2.8.13",
+    "eslint": "^9.26.0",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "prettier": "^3.5.3",
+    "semantic-release": "^24.2.3",
+    "ts-jest": "^29.3.2",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.31.1",
+    "@types/minimatch": "^5.1.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "",
+  "author": "",
+  "license": ""
+}
