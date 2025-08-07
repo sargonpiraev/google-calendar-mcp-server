@@ -15,8 +15,8 @@ Thank you for your interest in contributing to the Google Calendar API! This gui
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/sargonpiraev/google-tasks-mcp-server
-   cd google-tasks-mcp-server
+   git clone https://github.com/sargonpiraev/google-calendar-mcp-server
+   cd google-calendar-mcp-server
    ```
 
 2. **Install dependencies**:
@@ -129,10 +129,10 @@ We use semantic-release for automated versioning and publishing:
 
 ## 🆘 Getting Help
 
-- Check existing [issues](https://github.com/sargonpiraev/google-tasks-mcp-server/issues)
+- Check existing [issues](https://github.com/sargonpiraev/google-calendar-mcp-server/issues)
 - Create a new issue if you find a bug
 - Join our [Discord](https://discord.gg/ZsWGxRGj) for community support
 
 ## 📄 License
 
-By contributing to google-tasks, you agree that your contributions will be licensed under the MIT License.
+By contributing to google-calendar, you agree that your contributions will be licensed under the MIT License.

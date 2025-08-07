@@ -1,13 +1,13 @@
 {
   "name": "@sargonpiraev/google-calendar-mcp-server",
   "version": "v3",
-  "description": "Google Calendar MCP Server - Access and manage Google Calendar events through MCP protocol",
+  "description": "Google Calendar MCP server",
   "keywords": [
     "mcp",
     "claude",
     "ai",
     "assistant",
-    "google-tasks"
+    "google-calendar"
   ],
   "main": "./build/main.js",
   "types": "./build/main.d.ts",
@@ -18,7 +18,7 @@
     "LICENSE"
   ],
   "bin": {
-    "google-tasks-mcp-server": "./build/main.js"
+    "google-calendar-mcp-server": "./build/main.js"
   },
   "scripts": {
     "test": "jest --passWithNoTests --coverage",
@@ -31,7 +31,7 @@
     "commitlint": "commitlint --edit",
     "typecheck": "tsc --noEmit",
     "audit": "npm audit --omit=dev",
-    "inspect": "npx @modelcontextprotocol/inspector --config mcp.json --server google-tasks"
+    "inspect": "npx @modelcontextprotocol/inspector --config mcp.json --server google-calendar"
   },
   "engines": {
     "node": ">=18.0.0"

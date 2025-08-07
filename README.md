@@ -1,10 +1,10 @@
 # Google Calendar API MCP Server 🔧
 
-![npm version](https://img.shields.io/npm/v/@sargonpiraev/google-tasks-mcp-server)
-![npm downloads](https://img.shields.io/npm/dw/@sargonpiraev/google-tasks-mcp-server)
-![license](https://img.shields.io/github/license/sargonpiraev/google-tasks-mcp-server)
-![pipeline status](https://gitlab.com/sargonpiraev/google-tasks-mcp-server/badges/main/pipeline.svg)
-![smithery badge](https://smithery.ai/badge/@sargonpiraev/google-tasks-mcp-server)
+![npm version](https://img.shields.io/npm/v/@sargonpiraev/google-calendar-mcp-server)
+![npm downloads](https://img.shields.io/npm/dw/@sargonpiraev/google-calendar-mcp-server)
+![license](https://img.shields.io/github/license/sargonpiraev/google-calendar-mcp-server)
+![pipeline status](https://gitlab.com/sargonpiraev/google-calendar-mcp-server/badges/main/pipeline.svg)
+![smithery badge](https://smithery.ai/badge/@sargonpiraev/google-calendar-mcp-server)
 ![MCP Compatible](https://img.shields.io/badge/MCP-Compatible-blue)
 [![Join Discord](https://img.shields.io/discord/1331631275464671347?color=7289da&label=Discord&logo=discord)](https://discord.gg/ZsWGxRGj)
 
@@ -39,7 +39,7 @@ Before installation, you'll need a Google Calendar API API key:
 To install Google Calendar API MCP Server for any client automatically via [Smithery](https://smithery.ai):
 
 ```bash
-npx -y @smithery/cli@latest install @sargonpiraev/google-tasks-mcp-server --client <CLIENT_NAME>
+npx -y @smithery/cli@latest install @sargonpiraev/google-calendar-mcp-server --client <CLIENT_NAME>
 ```
 
 </details>
@@ -49,7 +49,7 @@ npx -y @smithery/cli@latest install @sargonpiraev/google-tasks-mcp-server --clie
 
 #### Cursor One-Click Installation
 
-[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=@sargonpiraev/google-tasks-mcp-server&config=)
+[![Install MCP Server](https://cursor.com/deeplink/mcp-install-dark.svg)](https://cursor.com/install-mcp?name=@sargonpiraev/google-calendar-mcp-server&config=eyJjb21tYW5kIjoibnB4IiwiYXJncyI6WyIteSIsIkBzYXJnb25waXJhZXYvZ29vZ2xlLWNhbGVuZGFyLW1jcC1zZXJ2ZXIiXSwiZW52Ijp7IkdPT0dMRV9DQUxFTkRBUl9DTElFTlRfSUQiOiJ5b3VyX2dvb2dsZV9jYWxlbmRhcl9jbGllbnRfaWRfaGVyZSIsIkdPT0dMRV9DQUxFTkRBUl9DTElFTlRfU0VDUkVUIjoieW91cl9nb29nbGVfY2FsZW5kYXJfY2xpZW50X3NlY3JldF9oZXJlIn19)
 
 #### Manual Configuration
 
@@ -58,12 +58,12 @@ Add to your Cursor `~/.cursor/mcp.json` file:
 ```json
 {
   "mcpServers": {
-    "google-tasks-mcp-server": {
+    "google-calendar-mcp-server": {
       "command": "npx",
-      "args": ["-y", "@sargonpiraev/google-tasks-mcp-server"],
+      "args": ["-y", "@sargonpiraev/google-calendar-mcp-server"],
       "env": {
-        "GOOGLE-TASKS_CLIENT_ID": "your-google-tasks_client_id",
-        "GOOGLE-TASKS_CLIENT_SECRET": "your-google-tasks_client_secret"
+        "GOOGLE_CALENDAR_CLIENT_ID": "your-google_calendar_client_id",
+        "GOOGLE_CALENDAR_CLIENT_SECRET": "your-google_calendar_client_secret"
       }
     }
   }
@@ -75,20 +75,20 @@ Add to your Cursor `~/.cursor/mcp.json` file:
 <details>
 <summary><b>Install in VS Code</b></summary>
 
-[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_MCP-0098FF)](vscode:mcp/install?%7B%22name%22%3A%22google-tasks-mcp-server%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22@sargonpiraev/google-tasks-mcp-server%22%5D%7D)
+[![Install in VS Code](https://img.shields.io/badge/VS_Code-Install_MCP-0098FF)](vscode:mcp/install?%7B%22name%22%3A%22google-calendar-mcp-server%22%2C%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22-y%22%2C%22@sargonpiraev/google-calendar-mcp-server%22%5D%7D)
 
 Or add manually to your VS Code settings:
 
 ```json
 "mcp": {
   "servers": {
-    "google-tasks-mcp-server": {
+    "google-calendar-mcp-server": {
       "type": "stdio",
       "command": "npx",
-      "args": ["-y", "@sargonpiraev/google-tasks-mcp-server"],
+      "args": ["-y", "@sargonpiraev/google-calendar-mcp-server"],
       "env": {
-        "GOOGLE-TASKS_CLIENT_ID": "your-google-tasks_client_id",
-        "GOOGLE-TASKS_CLIENT_SECRET": "your-google-tasks_client_secret"
+        "GOOGLE_CALENDAR_CLIENT_ID": "your-google_calendar_client_id",
+        "GOOGLE_CALENDAR_CLIENT_SECRET": "your-google_calendar_client_secret"
       }
     }
   }
@@ -105,12 +105,12 @@ Add to your `claude_desktop_config.json`:
 ```json
 {
   "mcpServers": {
-    "google-tasks-mcp-server": {
+    "google-calendar-mcp-server": {
       "command": "npx",
-      "args": ["-y", "@sargonpiraev/google-tasks-mcp-server"],
+      "args": ["-y", "@sargonpiraev/google-calendar-mcp-server"],
       "env": {
-        "GOOGLE-TASKS_CLIENT_ID": "your-google-tasks_client_id",
-        "GOOGLE-TASKS_CLIENT_SECRET": "your-google-tasks_client_secret"
+        "GOOGLE_CALENDAR_CLIENT_ID": "your-google_calendar_client_id",
+        "GOOGLE_CALENDAR_CLIENT_SECRET": "your-google_calendar_client_secret"
       }
     }
   }

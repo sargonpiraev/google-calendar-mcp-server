@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "google-tasks": {
+    "google-calendar": {
       "url": "http://localhost:3000/mcp"
     }
   }
