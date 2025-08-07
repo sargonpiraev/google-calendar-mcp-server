@@ -1,0 +1,6 @@
+
+
+> @sargonpiraev/google-calendar-mcp-server@v3 lint
+> eslint ./src --ext .ts
+
+[1G[0K

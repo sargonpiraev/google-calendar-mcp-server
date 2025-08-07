@@ -1,16 +1,7 @@
 {
-  "name": "@sargonpiraev/google-tasks-mcp-server",
+  "name": "@sargonpiraev/google-calendar-mcp-server",
   "version": "v3",
-  "description": "The Google Calendar API is a RESTful API that can be accessed through explicit HTTP calls or using the Google Client Libraries. 
-The API exposes most of the features available in the Google Calendar Web interface.
-
-Common terms:
-- **Event**: An event on a calendar containing information such as the title, start and end times, and attendees
-- **Calendar**: A collection of events with associated metadata such as description or default time zone
-- **Calendar List**: A list of all calendars on a user&#x27;s calendar list in the Calendar UI
-- **Setting**: A user preference from the Calendar UI, such as the user&#x27;s time zone
-- **ACL**: An access control rule granting a user (or group) a specified level of access to a calendar
-",
+  "description": "Google Calendar MCP Server - Access and manage Google Calendar events through MCP protocol",
   "keywords": [
     "mcp",
     "claude",
@@ -31,7 +22,7 @@ Common terms:
   },
   "scripts": {
     "test": "jest --passWithNoTests --coverage",
-    "dev": "tsx watch ./src/main.ts", 
+    "dev": "tsx watch ./src/main.ts",
     "build": "tsc -p tsconfig.json",
     "lint": "eslint ./src --ext .ts",
     "format": "prettier --write .",

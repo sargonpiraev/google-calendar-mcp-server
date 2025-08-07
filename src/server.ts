@@ -7,8 +7,8 @@ import { CallToolResult } from '@modelcontextprotocol/sdk/types.js'
 dotenv.config()
 
 export const envSchema = z.object({
-  GOOGLE-TASKS_CLIENT_ID: z.string(),
-  GOOGLE-TASKS_CLIENT_SECRET: z.string(),
+  GOOGLE_CALENDAR_CLIENT_ID: z.string(),
+  GOOGLE_CALENDAR_CLIENT_SECRET: z.string(),
 })
 
 export const mcpServer = new McpServer(
@@ -30,41 +30,45 @@ export const env = envSchema.parse(process.env)
 export const apiClient: AxiosInstance = axios.create({
   baseURL: 'https://www.googleapis.com/calendar/v3',
   headers: {
-    'Accept': 'application/json'
+    Accept: 'application/json',
   },
-  timeout: 30000
+  timeout: 30000,
 })
 
-apiClient.interceptors.request.use((config) => {
-  
-  return config
-}, (error) => {
-  return Promise.reject(error)
-})
+apiClient.interceptors.request.use(
+  (config) => {
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 function handleResult(data: unknown): CallToolResult {
   return {
-    content: [{ 
-      type: 'text', 
-      text: JSON.stringify(data, null, 2) 
-    }]
+    content: [
+      {
+        type: 'text',
+        text: JSON.stringify(data, null, 2),
+      },
+    ],
   }
 }
 
 function handleError(error: unknown): CallToolResult {
   console.error(error)
-  
+
   if (axios.isAxiosError(error)) {
     const message = error.response?.data?.message || error.message
-    return { 
-      isError: true, 
-      content: [{ type: 'text', text: `API Error: ${message}` }] 
+    return {
+      isError: true,
+      content: [{ type: 'text', text: `API Error: ${message}` }],
     } as CallToolResult
   }
-  
-  return { 
-    isError: true, 
-    content: [{ type: 'text', text: `Error: ${error}` }] 
+
+  return {
+    isError: true,
+    content: [{ type: 'text', text: `Error: ${error}` }],
   } as CallToolResult
 }
 
@@ -73,11 +77,11 @@ mcpServer.tool(
   'list-acl',
   `List access control rules`,
   {
-    'calendarId': z.string(),
-    'maxResults': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'syncToken': z.string().optional(),
+    calendarId: z.string(),
+    maxResults: z.string().optional(),
+    pageToken: z.string().optional(),
+    showDeleted: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -91,15 +95,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -111,8 +114,8 @@ mcpServer.tool(
   'insert-acl',
   `Create access control rule`,
   {
-    'calendarId': z.string(),
-    'sendNotifications': z.string().optional(),
+    calendarId: z.string(),
+    sendNotifications: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -126,15 +129,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -146,8 +148,8 @@ mcpServer.tool(
   'get-acl',
   `Get access control rule`,
   {
-    'calendarId': z.string(),
-    'ruleId': z.string(),
+    calendarId: z.string(),
+    ruleId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -161,15 +163,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -181,9 +182,9 @@ mcpServer.tool(
   'update-acl',
   `Update access control rule`,
   {
-    'calendarId': z.string(),
-    'ruleId': z.string(),
-    'sendNotifications': z.string().optional(),
+    calendarId: z.string(),
+    ruleId: z.string(),
+    sendNotifications: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -197,15 +198,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PUT',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -217,9 +217,9 @@ mcpServer.tool(
   'patch-acl',
   `Patch access control rule`,
   {
-    'calendarId': z.string(),
-    'ruleId': z.string(),
-    'sendNotifications': z.string().optional(),
+    calendarId: z.string(),
+    ruleId: z.string(),
+    sendNotifications: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -233,15 +233,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PATCH',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -253,8 +252,8 @@ mcpServer.tool(
   'delete-acl',
   `Delete access control rule`,
   {
-    'calendarId': z.string(),
-    'ruleId': z.string(),
+    calendarId: z.string(),
+    ruleId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -268,15 +267,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'DELETE',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -288,11 +286,11 @@ mcpServer.tool(
   'watch-acl',
   `Watch for changes to ACL resources`,
   {
-    'calendarId': z.string(),
-    'maxResults': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'syncToken': z.string().optional(),
+    calendarId: z.string(),
+    maxResults: z.string().optional(),
+    pageToken: z.string().optional(),
+    showDeleted: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -306,15 +304,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -326,12 +323,12 @@ mcpServer.tool(
   'list-calendar-list',
   `List calendars`,
   {
-    'maxResults': z.string().optional(),
-    'minAccessRole': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'showHidden': z.string().optional(),
-    'syncToken': z.string().optional(),
+    maxResults: z.string().optional(),
+    minAccessRole: z.string().optional(),
+    pageToken: z.string().optional(),
+    showDeleted: z.string().optional(),
+    showHidden: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -344,15 +341,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: '/users/me/calendarList',
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -364,7 +360,7 @@ mcpServer.tool(
   'insert-calendar-list',
   `Insert calendar into calendar list`,
   {
-    'colorRgbFormat': z.string().optional(),
+    colorRgbFormat: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -377,15 +373,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: '/users/me/calendarList',
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -397,7 +392,7 @@ mcpServer.tool(
   'get-calendar-list',
   `Get calendar from calendar list`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -411,15 +406,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -431,8 +425,8 @@ mcpServer.tool(
   'update-calendar-list',
   `Update calendar in calendar list`,
   {
-    'calendarId': z.string(),
-    'colorRgbFormat': z.string().optional(),
+    calendarId: z.string(),
+    colorRgbFormat: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -446,15 +440,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PUT',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -466,8 +459,8 @@ mcpServer.tool(
   'patch-calendar-list',
   `Patch calendar in calendar list`,
   {
-    'calendarId': z.string(),
-    'colorRgbFormat': z.string().optional(),
+    calendarId: z.string(),
+    colorRgbFormat: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -481,15 +474,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PATCH',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -501,7 +493,7 @@ mcpServer.tool(
   'delete-calendar-list',
   `Remove calendar from calendar list`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -515,15 +507,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'DELETE',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -535,12 +526,12 @@ mcpServer.tool(
   'watch-calendar-list',
   `Watch for changes to CalendarList resources`,
   {
-    'maxResults': z.string().optional(),
-    'minAccessRole': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'showHidden': z.string().optional(),
-    'syncToken': z.string().optional(),
+    maxResults: z.string().optional(),
+    minAccessRole: z.string().optional(),
+    pageToken: z.string().optional(),
+    showDeleted: z.string().optional(),
+    showHidden: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -553,15 +544,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: '/users/me/calendarList/watch',
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -569,43 +559,36 @@ mcpServer.tool(
   }
 )
 
-mcpServer.tool(
-  'insert-calendar',
-  `Create calendar`,
-  {
-  },
-  async (args, extra) => {
-    try {
-      const requestData = args
+mcpServer.tool('insert-calendar', `Create calendar`, {}, async (args, extra) => {
+  try {
+    const requestData = args
 
-      // Map camelCase to original parameter names for API request
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedParams: any = { ...requestData }
+    // Map camelCase to original parameter names for API request
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mappedParams: any = { ...requestData }
 
-      // Extract authorization token from HTTP request headers
-      const authorization = extra?.requestInfo?.headers?.authorization as string
-      const bearer = authorization?.replace('Bearer ', '')
-  
-      
-      const response = await apiClient.request({
-        headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
-        method: 'POST',
-        url: '/calendars',
-        data: mappedParams
-      })
-      
-      return handleResult(response.data)
-    } catch (error) {
-      return handleError(error)
-    }
+    // Extract authorization token from HTTP request headers
+    const authorization = extra?.requestInfo?.headers?.authorization as string
+    const bearer = authorization?.replace('Bearer ', '')
+
+    const response = await apiClient.request({
+      headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
+      method: 'POST',
+      url: '/calendars',
+      data: mappedParams,
+    })
+
+    return handleResult(response.data)
+  } catch (error) {
+    return handleError(error)
   }
-)
+})
 
 mcpServer.tool(
   'get-calendar',
   `Get calendar`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -619,15 +602,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -639,7 +621,7 @@ mcpServer.tool(
   'update-calendar',
   `Update calendar`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -653,15 +635,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PUT',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -673,7 +654,7 @@ mcpServer.tool(
   'patch-calendar',
   `Patch calendar`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -687,15 +668,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PATCH',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -707,7 +687,7 @@ mcpServer.tool(
   'delete-calendar',
   `Delete calendar`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -721,15 +701,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'DELETE',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -741,7 +720,7 @@ mcpServer.tool(
   'clear-calendar',
   `Clear primary calendar`,
   {
-    'calendarId': z.string(),
+    calendarId: z.string(),
   },
   async (args, extra) => {
     try {
@@ -755,15 +734,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -775,25 +753,25 @@ mcpServer.tool(
   'list-events',
   `List events`,
   {
-    'calendarId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'eventTypes': z.string().optional(),
-    'iCalUID': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'maxResults': z.string().optional(),
-    'orderBy': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'privateExtendedProperty': z.string().optional(),
-    'q': z.string().optional(),
-    'sharedExtendedProperty': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'showHiddenInvitations': z.string().optional(),
-    'singleEvents': z.string().optional(),
-    'syncToken': z.string().optional(),
-    'timeMax': z.string().optional(),
-    'timeMin': z.string().optional(),
-    'timeZone': z.string().optional(),
-    'updatedMin': z.string().optional(),
+    calendarId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    eventTypes: z.string().optional(),
+    iCalUID: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    maxResults: z.string().optional(),
+    orderBy: z.string().optional(),
+    pageToken: z.string().optional(),
+    privateExtendedProperty: z.string().optional(),
+    q: z.string().optional(),
+    sharedExtendedProperty: z.string().optional(),
+    showDeleted: z.string().optional(),
+    showHiddenInvitations: z.string().optional(),
+    singleEvents: z.string().optional(),
+    syncToken: z.string().optional(),
+    timeMax: z.string().optional(),
+    timeMin: z.string().optional(),
+    timeZone: z.string().optional(),
+    updatedMin: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -807,15 +785,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -827,12 +804,12 @@ mcpServer.tool(
   'insert-event',
   `Create event`,
   {
-    'calendarId': z.string(),
-    'conferenceDataVersion': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
-    'supportsAttachments': z.string().optional(),
+    calendarId: z.string(),
+    conferenceDataVersion: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
+    supportsAttachments: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -846,15 +823,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -866,11 +842,11 @@ mcpServer.tool(
   'get-event',
   `Get event`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'timeZone': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    timeZone: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -884,15 +860,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -904,14 +879,14 @@ mcpServer.tool(
   'update-event',
   `Update event`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'conferenceDataVersion': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
-    'supportsAttachments': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    conferenceDataVersion: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
+    supportsAttachments: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -925,15 +900,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PUT',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -945,14 +919,14 @@ mcpServer.tool(
   'patch-event',
   `Patch event`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'conferenceDataVersion': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
-    'supportsAttachments': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    conferenceDataVersion: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
+    supportsAttachments: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -966,15 +940,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'PATCH',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -986,10 +959,10 @@ mcpServer.tool(
   'delete-event',
   `Delete event`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1003,15 +976,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'DELETE',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1023,17 +995,17 @@ mcpServer.tool(
   'instances-event',
   `Get event instances`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'maxResults': z.string().optional(),
-    'originalStart': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'timeMax': z.string().optional(),
-    'timeMin': z.string().optional(),
-    'timeZone': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    maxResults: z.string().optional(),
+    originalStart: z.string().optional(),
+    pageToken: z.string().optional(),
+    showDeleted: z.string().optional(),
+    timeMax: z.string().optional(),
+    timeMin: z.string().optional(),
+    timeZone: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1047,15 +1019,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1067,11 +1038,11 @@ mcpServer.tool(
   'move-event',
   `Move event`,
   {
-    'calendarId': z.string(),
-    'eventId': z.string(),
-    'destination': z.string(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
+    calendarId: z.string(),
+    eventId: z.string(),
+    destination: z.string(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1085,15 +1056,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1105,9 +1075,9 @@ mcpServer.tool(
   'import-event',
   `Import event`,
   {
-    'calendarId': z.string(),
-    'conferenceDataVersion': z.string().optional(),
-    'supportsAttachments': z.string().optional(),
+    calendarId: z.string(),
+    conferenceDataVersion: z.string().optional(),
+    supportsAttachments: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1121,15 +1091,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1141,10 +1110,10 @@ mcpServer.tool(
   'quick-add-event',
   `Quick add event`,
   {
-    'calendarId': z.string(),
-    'text': z.string(),
-    'sendNotifications': z.string().optional(),
-    'sendUpdates': z.string().optional(),
+    calendarId: z.string(),
+    text: z.string(),
+    sendNotifications: z.string().optional(),
+    sendUpdates: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1158,15 +1127,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1178,25 +1146,25 @@ mcpServer.tool(
   'watch-events',
   `Watch for changes to Events resources`,
   {
-    'calendarId': z.string(),
-    'alwaysIncludeEmail': z.string().optional(),
-    'eventTypes': z.string().optional(),
-    'iCalUID': z.string().optional(),
-    'maxAttendees': z.string().optional(),
-    'maxResults': z.string().optional(),
-    'orderBy': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'privateExtendedProperty': z.string().optional(),
-    'q': z.string().optional(),
-    'sharedExtendedProperty': z.string().optional(),
-    'showDeleted': z.string().optional(),
-    'showHiddenInvitations': z.string().optional(),
-    'singleEvents': z.string().optional(),
-    'syncToken': z.string().optional(),
-    'timeMax': z.string().optional(),
-    'timeMin': z.string().optional(),
-    'timeZone': z.string().optional(),
-    'updatedMin': z.string().optional(),
+    calendarId: z.string(),
+    alwaysIncludeEmail: z.string().optional(),
+    eventTypes: z.string().optional(),
+    iCalUID: z.string().optional(),
+    maxAttendees: z.string().optional(),
+    maxResults: z.string().optional(),
+    orderBy: z.string().optional(),
+    pageToken: z.string().optional(),
+    privateExtendedProperty: z.string().optional(),
+    q: z.string().optional(),
+    sharedExtendedProperty: z.string().optional(),
+    showDeleted: z.string().optional(),
+    showHiddenInvitations: z.string().optional(),
+    singleEvents: z.string().optional(),
+    syncToken: z.string().optional(),
+    timeMax: z.string().optional(),
+    timeMin: z.string().optional(),
+    timeZone: z.string().optional(),
+    updatedMin: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1210,15 +1178,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: url,
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1226,77 +1193,63 @@ mcpServer.tool(
   }
 )
 
-mcpServer.tool(
-  'query-freebusy',
-  `Query free/busy information`,
-  {
-  },
-  async (args, extra) => {
-    try {
-      const requestData = args
+mcpServer.tool('query-freebusy', `Query free/busy information`, {}, async (args, extra) => {
+  try {
+    const requestData = args
 
-      // Map camelCase to original parameter names for API request
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedParams: any = { ...requestData }
+    // Map camelCase to original parameter names for API request
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mappedParams: any = { ...requestData }
 
-      // Extract authorization token from HTTP request headers
-      const authorization = extra?.requestInfo?.headers?.authorization as string
-      const bearer = authorization?.replace('Bearer ', '')
-  
-      
-      const response = await apiClient.request({
-        headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
-        method: 'POST',
-        url: '/freeBusy',
-        data: mappedParams
-      })
-      
-      return handleResult(response.data)
-    } catch (error) {
-      return handleError(error)
-    }
+    // Extract authorization token from HTTP request headers
+    const authorization = extra?.requestInfo?.headers?.authorization as string
+    const bearer = authorization?.replace('Bearer ', '')
+
+    const response = await apiClient.request({
+      headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
+      method: 'POST',
+      url: '/freeBusy',
+      data: mappedParams,
+    })
+
+    return handleResult(response.data)
+  } catch (error) {
+    return handleError(error)
   }
-)
+})
 
-mcpServer.tool(
-  'get-colors',
-  `Get color definitions`,
-  {
-  },
-  async (args, extra) => {
-    try {
-      const queryParams = args
+mcpServer.tool('get-colors', `Get color definitions`, {}, async (args, extra) => {
+  try {
+    const queryParams = args
 
-      // Map camelCase to original parameter names for API request
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedParams: any = { ...queryParams }
+    // Map camelCase to original parameter names for API request
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mappedParams: any = { ...queryParams }
 
-      // Extract authorization token from HTTP request headers
-      const authorization = extra?.requestInfo?.headers?.authorization as string
-      const bearer = authorization?.replace('Bearer ', '')
-  
-      
-      const response = await apiClient.request({
-        headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
-        method: 'GET',
-        url: '/colors',
-        params: mappedParams
-      })
-      
-      return handleResult(response.data)
-    } catch (error) {
-      return handleError(error)
-    }
+    // Extract authorization token from HTTP request headers
+    const authorization = extra?.requestInfo?.headers?.authorization as string
+    const bearer = authorization?.replace('Bearer ', '')
+
+    const response = await apiClient.request({
+      headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
+      method: 'GET',
+      url: '/colors',
+      params: mappedParams,
+    })
+
+    return handleResult(response.data)
+  } catch (error) {
+    return handleError(error)
   }
-)
+})
 
 mcpServer.tool(
   'list-settings',
   `List settings`,
   {
-    'maxResults': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'syncToken': z.string().optional(),
+    maxResults: z.string().optional(),
+    pageToken: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1309,15 +1262,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: '/users/me/settings',
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1329,7 +1281,7 @@ mcpServer.tool(
   'get-setting',
   `Get setting`,
   {
-    'setting': z.string(),
+    setting: z.string(),
   },
   async (args, extra) => {
     try {
@@ -1343,15 +1295,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'GET',
         url: url,
-        params: mappedParams
+        params: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1363,9 +1314,9 @@ mcpServer.tool(
   'watch-settings',
   `Watch for changes to Settings resources`,
   {
-    'maxResults': z.string().optional(),
-    'pageToken': z.string().optional(),
-    'syncToken': z.string().optional(),
+    maxResults: z.string().optional(),
+    pageToken: z.string().optional(),
+    syncToken: z.string().optional(),
   },
   async (args, extra) => {
     try {
@@ -1378,15 +1329,14 @@ mcpServer.tool(
       // Extract authorization token from HTTP request headers
       const authorization = extra?.requestInfo?.headers?.authorization as string
       const bearer = authorization?.replace('Bearer ', '')
-  
-      
+
       const response = await apiClient.request({
         headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
         method: 'POST',
         url: '/users/me/settings/watch',
-        data: mappedParams
+        data: mappedParams,
       })
-      
+
       return handleResult(response.data)
     } catch (error) {
       return handleError(error)
@@ -1394,35 +1344,27 @@ mcpServer.tool(
   }
 )
 
-mcpServer.tool(
-  'stop-channel',
-  `Stop watching resources`,
-  {
-  },
-  async (args, extra) => {
-    try {
-      const requestData = args
+mcpServer.tool('stop-channel', `Stop watching resources`, {}, async (args, extra) => {
+  try {
+    const requestData = args
 
-      // Map camelCase to original parameter names for API request
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const mappedParams: any = { ...requestData }
+    // Map camelCase to original parameter names for API request
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const mappedParams: any = { ...requestData }
 
-      // Extract authorization token from HTTP request headers
-      const authorization = extra?.requestInfo?.headers?.authorization as string
-      const bearer = authorization?.replace('Bearer ', '')
-  
-      
-      const response = await apiClient.request({
-        headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
-        method: 'POST',
-        url: '/channels/stop',
-        data: mappedParams
-      })
-      
-      return handleResult(response.data)
-    } catch (error) {
-      return handleError(error)
-    }
+    // Extract authorization token from HTTP request headers
+    const authorization = extra?.requestInfo?.headers?.authorization as string
+    const bearer = authorization?.replace('Bearer ', '')
+
+    const response = await apiClient.request({
+      headers: bearer ? { Authorization: `Bearer ${bearer}` } : undefined,
+      method: 'POST',
+      url: '/channels/stop',
+      data: mappedParams,
+    })
+
+    return handleResult(response.data)
+  } catch (error) {
+    return handleError(error)
   }
-)
-
+})
